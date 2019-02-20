@@ -52,7 +52,7 @@ We pretrained models for pose/layout estimation and bounding box estimation with
 ## Training 
 1.  We provide several settings for training the proposed model. The best performance is gained by pretrained on SUNCG dataset and fine-tuned on SUNRGBD dataset which can be run by 
     
-    sh scripts/sunrgbd_train_jointnet.sh
+        sh scripts/sunrgbd_train_jointnet.sh
     
 2. You could also fine-tune the posenet and bdbnet respectively by running
     
@@ -78,12 +78,14 @@ Change the model path --model_path_pose and --model_path_bdb in test.py and run 
        evaluation/vis/show_result.m
 
 2. Layout estimation
-
+    
         evaluation/roomlayout/layout_evaluate.m
         
 3. 3D object detection 
+        
         evaluation/detection/script_eval_detection.m
         
 4. Holistic scene understanding
+        
         evaluation/holisticScene/evaluate_holistic.m
 
