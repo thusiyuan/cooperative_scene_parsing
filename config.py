@@ -21,7 +21,9 @@ class Config(object):
         self.dataset = dataset
         self.project_root = '/home/siyuan/Dropbox/Project/nips2018'
         if self.dataset == 'sunrgbd':
-            self.metadata_root = '/home/siyuan/Documents/nips2018/sunrgbd'
+            self.metadata_root = 'metadata/sunrgbd'
+            self.data_root = 'metadata/sunrgbd/Dataset'
+            self.clean_data_root = os.path.join(self.data_root, 'data_clean')
             self.proposal_root = os.path.join(self.metadata_root, 'sunrgbdproposals')
             self.obj_category = ['recycle_bin', 'cpu', 'paper', 'toilet', 'stool', 'whiteboard', 'coffee_table',
                                'picture',

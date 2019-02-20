@@ -35,7 +35,7 @@ parser.add_argument('--batchSize', type=int, default=1, help='training batch siz
 parser.add_argument('--testBatchSize', type=int, default=1, help='testing batch size')
 parser.add_argument('--threads', type=int, default=8, help='number of threads for data loader to use')
 parser.add_argument('--nEpochs', type=int, default=200, help='number of epochs to train for')
-parser.add_argument('--metadataPath', type=str, default='/home/siyuan/Documents/nips2018', help='data saving dir')
+parser.add_argument('--metadataPath', type=str, default='metadata/', help='data saving dir')
 parser.add_argument('--dataset', type=str, default='sunrgbd', help='sunrgbd or suncg. Default=sunrgbd')
 parser.add_argument('--cls_reg_ratio', type=float, default=10, help='the ratio between the loss of classification and regression')
 parser.add_argument('--obj_cam_ratio', type=float, default=1, help='the ratio between the loss of classification and regression')

@@ -5,6 +5,9 @@ Created on Mar, 2018
 
 Preprocess the SUNRGBD dataset
 """
+
+import sys
+sys.path.append('.')
 import json
 import pickle
 import config

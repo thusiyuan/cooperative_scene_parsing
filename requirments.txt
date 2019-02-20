@@ -3,6 +3,5 @@ torchvision==0.2.1
 shapely
 scipy
 matplotlib
-mayavi
 sklearn
 vtk
