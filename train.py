@@ -42,8 +42,8 @@ parser.add_argument('--obj_cam_ratio', type=float, default=1, help='the ratio be
 parser.add_argument('--branch', type=str, default='jointnet', help='posenet, bdbnet or jointnet')
 parser.add_argument('--rate_decay', type=float, default=10, help='decrease the learning rate by certain epochs')
 parser.add_argument('--fine_tune', type=str2bool, default=True, help='whether to fine-tune the model')
-parser.add_argument('--pre_train_model_path', type=str, default='suncg/models_final/posenet_5_8.pth', help='the directory of pre-trained model')
-parser.add_argument('--pre_train_model_path_2', type=str, default='suncg/models_final/bdbnet_5_8.pth', help='second model path when train the joint net')
+parser.add_argument('--pre_train_model_path', type=str, default='suncg/models_final/posenet_suncg.pth', help='the directory of pre-trained model')
+parser.add_argument('--pre_train_model_path_2', type=str, default='suncg/models_final/bdbnet_suncg.pth', help='second model path when train the joint net')
 
 
 opt = parser.parse_args()

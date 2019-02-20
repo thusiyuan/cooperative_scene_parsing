@@ -12,6 +12,7 @@ import logging
 import os
 import pickle
 
+
 class Config(object):
     def __init__(self, dataset='sunrgbd'):
         """
@@ -21,8 +22,6 @@ class Config(object):
         self.project_root = '/home/siyuan/Dropbox/Project/nips2018'
         if self.dataset == 'sunrgbd':
             self.metadata_root = '/home/siyuan/Documents/nips2018/sunrgbd'
-            self.data_root = '/home/siyuan/Documents/Dataset/SUNRGBD_ALL'
-            self.clean_data_root = os.path.join(self.data_root, 'data_clean')
             self.proposal_root = os.path.join(self.metadata_root, 'sunrgbdproposals')
             self.obj_category = ['recycle_bin', 'cpu', 'paper', 'toilet', 'stool', 'whiteboard', 'coffee_table',
                                'picture',
@@ -30,16 +29,6 @@ class Config(object):
                                'sink',
                                'monitor', 'computer', 'cabinet', 'shelf', 'lamp', 'garbage_bin', 'box', 'bed', 'sofa',
                                'sofa_chair', 'pillow', 'desk', 'table', 'chair']
-        if self.dataset == 'suncg':
-            self.metadata_root = '/home/siyuan/Documents/nips2018/suncg'
-            self.data_root = '/media/siyuan/Data/Dataset/Rendered_SUNCG'
-            self.obj_category = ['dining_table', 'mirror', 'computer', 'table_lamp', 'toilet', 'tv_stand', 'ottoman',
-                               'office_chair',
-                               'sink', 'stand', 'hanging_kitchen_cabinet', 'desk', 'person', 'double_bed', 'television',
-                               'picture_frame',
-                               'coffee_table', 'armchair', 'plant', 'chandelier', 'toy', 'shelving', 'wardrobe_cabinet',
-                               'rug', 'curtain',
-                               'sofa', 'door', 'chair', 'kitchen_cabinet', 'window']
 
     def bins(self):
         bin = dict()

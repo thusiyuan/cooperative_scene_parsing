@@ -41,8 +41,8 @@ parser.add_argument('--dataset', type=str, default='sunrgbd', help='sunrgbd or s
 parser.add_argument('--cls_reg_ratio', type=float, default=10, help='the ratio between the loss of classification and regression')
 parser.add_argument('--obj_cam_ratio', type=float, default=1, help='the ratio between the loss of classification and regression')
 parser.add_argument('--branch', type=str, default='jointnet', help='posenet, bdbnet or jointnet')
-parser.add_argument('--model_path', type=str, default='sunrgbd/models_final/joint_posenet_full.pth', help='the directory of trained model')
-parser.add_argument('--model_path_2', type=str, default='sunrgbd/models_final/joint_bdbnet_full.pth')
+parser.add_argument('--model_path_pose', type=str, default='sunrgbd/models_final/joint_posenet_full.pth', help='the directory of trained model')
+parser.add_argument('--model_path_bdb', type=str, default='sunrgbd/models_final/joint_bdbnet_full.pth')
 parser.add_argument('--vis', type=bool, default=False, help='whether to visualize the result')
 parser.add_argument('--save_result', type=bool, default=False, help='whether to save the result')
 
@@ -63,22 +63,18 @@ print '======> loading dataset'
 posenet = PosNet().to(device)
 bdb3dnet = Bdb3dNet().to(device)
 
-pretrained_path = op.join(opt.metadataPath, opt.model_path)
-pretrained_path_2 = op.join(opt.metadataPath, opt.model_path_2)
+pretrained_path_pose = op.join(opt.metadataPath, opt.model_path_pose)
+pretrained_path_bdb = op.join(opt.metadataPath, opt.model_path_bdb)
 if opt.branch == 'posenet':
-    posenet.load_weight(pretrained_path)
+    posenet.load_weight(pretrained_path_pose)
 if opt.branch == 'bdbnet':
-    bdb3dnet.load_weight(pretrained_path_2)
+    bdb3dnet.load_weight(pretrained_path_bdb)
 if opt.branch == 'jointnet':
-    posenet.load_weight(pretrained_path)
-    bdb3dnet.load_weight(pretrained_path_2)
+    posenet.load_weight(pretrained_path_pose)
+    bdb3dnet.load_weight(pretrained_path_bdb)
 
-if opt.dataset == 'sunrgbd':
-    from data.sunrgbd import sunrgbd_test_loader
-    test_loader = sunrgbd_test_loader(opt)
-if opt.dataset == 'suncg':
-    from data.suncg import suncg_test_loader
-    test_loader = suncg_test_loader(opt)
+from data.sunrgbd import sunrgbd_test_loader
+test_loader = sunrgbd_test_loader(opt)
 
 cls_criterion = nn.CrossEntropyLoss(size_average=True, reduce=True)
 reg_criterion = nn.SmoothL1Loss(size_average=True, reduce=True)
@@ -149,7 +145,6 @@ def test_epoch(epoch):
             sequence_id = sequence['sequence_id']
             if opt.branch == 'posenet' or opt.branch == 'jointnet':
                 image = sequence['image'].to(device)
-                if_l_b = sequence['if_l_b']
                 K, yaw_reg, yaw_cls, roll_reg, roll_cls, lo_ori_reg, lo_ori_cls, lo_centroid, lo_coeffs = \
                     sequence['camera']['K'].float().to(device), \
                     sequence['camera']['yaw_reg'].float().to(device), \
@@ -185,7 +180,7 @@ def test_epoch(epoch):
                 layout_bdb = get_layout_bdb(bins_tensor, torch.argmax(lo_ori_cls_result, 1), lo_ori_reg_result, lo_centroid_result, lo_coeffs_result)
                 if not op.exists(op.join(result_save_path, str(sequence_id[0].numpy()))):
                     os.mkdir(op.join(result_save_path, str(sequence_id[0].numpy())))
-                savemat(op.join(result_save_path, str(sequence_id[0].numpy()), 'layout.mat'), mdict={'layout': layout_bdb[0, :, :].cpu().numpy(), 'if_l_b': if_l_b.numpy()})
+                savemat(op.join(result_save_path, str(sequence_id[0].numpy()), 'layout.mat'), mdict={'layout': layout_bdb[0, :, :].cpu().numpy()})
             if opt.branch == 'bdbnet' or opt.branch == 'jointnet':
                 patch = sequence['boxes_batch']['patch'].to(device)
                 bdb2d, bdb3d, bdb_pos, size_reg, size_cls, ori_reg, ori_cls, centroid_reg, centroid_cls, offset_2d = \

@@ -11,7 +11,6 @@ import matplotlib.pyplot as plt
 import numpy as np
 from random import random as rand
 from mpl_toolkits.mplot3d import Axes3D
-import mayavi.mlab as mlab
 
 
 def show_2dboxes(im, bdbs, color_list=[], random_color=True, scale=1.0):
@@ -79,40 +78,6 @@ def show_3d_box(boxes):
     plt.show()
 
 
-def draw_gt_boxes3d(gt_boxes3d, fig, color=(1,1,1), line_width=1, draw_text=True, text_scale=(1,1,1), color_list=None):
-    ''' Draw 3D bounding boxes
-        Modified from https://github.com/charlesq34/frustum-pointnets/blob/master/kitti/kitti_object.py
-    Args:
-        gt_boxes3d: numpy array (n,8,3) for XYZs of the box corners
-        fig: mayavi figure handler
-        color: RGB value tuple in range (0,1), box line color
-        line_width: box line width
-        draw_text: boolean, if true, write box indices beside boxes
-        text_scale: three number tuple
-        color_list: a list of RGB tuple, if not None, overwrite color.
-    Returns:
-        fig: updated fig
-    '''
-    num = len(gt_boxes3d)
-    for n in range(num):
-        b = gt_boxes3d[n]
-        if color_list is not None:
-            color = color_list[n]
-        if draw_text: mlab.text3d(b[4,0], b[4,1], b[4,2], '%d'%n, scale=text_scale, color=color, figure=fig)
-        for k in range(0,4):
-            #http://docs.enthought.com/mayavi/mayavi/auto/mlab_helper_functions.html
-            i,j=k,(k+1)%4
-            mlab.plot3d([b[i,0], b[j,0]], [b[i,1], b[j,1]], [b[i,2], b[j,2]], color=color, tube_radius=None, line_width=line_width, figure=fig)
-
-            i,j=k+4,(k+1)%4 + 4
-            mlab.plot3d([b[i,0], b[j,0]], [b[i,1], b[j,1]], [b[i,2], b[j,2]], color=color, tube_radius=None, line_width=line_width, figure=fig)
-
-            i,j=k,k+4
-            mlab.plot3d([b[i,0], b[j,0]], [b[i,1], b[j,1]], [b[i,2], b[j,2]], color=color, tube_radius=None, line_width=line_width, figure=fig)
-    #mlab.view(azimuth=180, elevation=70, focalpoint=[ 12.0909996 , -1.04700089, -2.03249991], distance=62.0, figure=fig)
-    return fig
-
-
 def hex_to_rgb(hex):
     hex = hex.lstrip('#')
     hlen = len(hex)
@@ -136,18 +101,3 @@ def object_color(obj_id, if_rgb, if_random):
         return hex_to_rgb(obj_color[obj_id][1:])
     else:
         return obj_color[obj_id]
-
-
-def show_whole_room(layout, obj_vertexes):
-    fig = mlab.figure(figure=None, bgcolor=(0, 0, 0),
-                      fgcolor=None, engine=None, size=(1000, 500))
-    fig = draw_gt_boxes3d(layout, fig, draw_text=False, color=(1, 0, 0),
-                          line_width=3)
-    fig = draw_gt_boxes3d(obj_vertexes, fig, draw_text=False,
-                          color_list=[object_color(1, True, True) for _ in range(obj_vertexes.shape[0])], line_width=2)
-    mlab.view(azimuth=0)
-    # mlab.view(azimuth=0, elevation=180-roll)
-    # cam = fig.scene.camera
-    # cam.position = [0, 0, 0]
-    mlab.show()
-    print 'show whole room'

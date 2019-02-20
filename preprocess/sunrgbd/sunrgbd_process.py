@@ -14,7 +14,7 @@ import numpy as np
 from sunrgbd_parser import readsunrgbdframe
 from utils.sunrgbd_utils import project_struct_bdb_to_2d, get_iou, check_bdb, get_corners_of_bb3d, get_bdb_from_corners, get_corners_of_bb3d_no_index, project_3d_points_to_2d
 from utils.camera_utils import yaw_pitch_row_from_r, get_rotation_matrix_from_yaw_roll
-from utils.vis_utils import show_2dboxes, show_whole_room, show_3d_box
+from utils.vis_utils import show_2dboxes
 from sklearn.cluster import KMeans
 from scipy.io import loadmat
 import random
@@ -76,16 +76,6 @@ def prepare_data(gt_2d_bdb=False, patch_h=224, patch_w=224, shift=True, iou_thre
     for i in range(10335):
         sequence = readsunrgbdframe(image_id=i+1)
         print i+1
-        scene_category_path = os.path.join('/home/siyuan/Documents/Dataset/SUNRGBD_ALL', sequence.sequence_name, 'scene.txt')
-        if_l_b = 0
-        if not os.path.exists(scene_category_path):
-            scene_category = None
-        else:
-            with open(scene_category_path, 'r') as f:
-                scene_category = f.readline()
-            f.close
-        if scene_category == 'living_room' or scene_category == 'bedroom':
-            if_l_b = 1
         sequence._R_tilt = loadmat(op.join(PATH.metadata_root, 'updated_rtilt', str(i+1) + '.mat'))['r_tilt']
         # R_ex is cam to world
         sequence._R_ex = np.array([[1, 0, 0], [0, 0, -1], [0, 1, 0]]).dot(sequence.R_tilt).dot(np.array([[1, 0, 0], [0, 0, 1], [0, -1, 0]]))
@@ -98,7 +88,6 @@ def prepare_data(gt_2d_bdb=False, patch_h=224, patch_w=224, shift=True, iou_thre
                 print 'ground truth not valid'
         sequence._bdb2d = result
 
-        # print i, len(sequence.bdb3d), len(sequence.bdb2d)
         bdb2d_from_3d_list = []
         with open(op.join(PATH.metadata_root, '2dbdb', str(i + 1) + '.json'), 'r') as f:
             detected_bdbs = json.load(f)
@@ -127,9 +116,6 @@ def prepare_data(gt_2d_bdb=False, patch_h=224, patch_w=224, shift=True, iou_thre
                             iou_ind = j
                             max_iou = iou
                 if iou_ind >= 0:
-                    # print max_iou, bdb2d_from_3d, sequence.bdb2d[iou_ind]
-                    # print bdb2d_from_3d
-                    # print sequence.bdb2d[iou_ind]
                     if shift:
                         shifted_box = random_shift_2d_box(sequence.bdb2d[iou_ind])
                         boxes.append({'2dbdb': shifted_box, '3dbdb': bdb3d,
@@ -163,14 +149,6 @@ def prepare_data(gt_2d_bdb=False, patch_h=224, patch_w=224, shift=True, iou_thre
         camera_flip = dict()
         camera['yaw_cls'], camera['yaw_reg'], camera['roll_cls'], camera['roll_reg'] = camera_cls_reg(sequence.R_ex.T, bin)
         camera['K'] = sequence.K
-        # the rotation matrix from yaw and roll
-        # yaw = num_from_bins(bin['yaw_bin'], camera['yaw_cls'], camera['yaw_reg'])
-        # roll = num_from_bins(bin['roll_bin'], camera['roll_cls'], camera['roll_reg'])
-        # # print sequence.R_ex.T
-        # print sequence.K
-        # print get_rotation_matrix_from_yaw_roll(- yaw / 180 * np.pi, - roll / 180 * np.pi)
-        # r_ex_recover = get_rotation_matrix_from_yaw_roll(- yaw / 180 * np.pi, - roll / 180 * np.pi)
-        # r_tilt_recover = np.array([[1, 0, 0], [0, 0, 1], [0, -1, 0]]).dot(r_ex_recover).dot(np.array([[1, 0, 0], [0, 0, -1], [0, 1, 0]]))
         # flip the camera
         camera_flip['yaw_cls'], camera_flip['yaw_reg'], camera_flip['roll_cls'], camera_flip['roll_reg'] = camera_cls_reg(sequence.R_ex.T, bin, flip=True)
         camera_flip['K'] = sequence.K
@@ -211,14 +189,6 @@ def prepare_data(gt_2d_bdb=False, patch_h=224, patch_w=224, shift=True, iou_thre
             delta_2d.append(((box_set['bdb_pos'][0] + box_set['bdb_pos'][2]) / 2 - box['projected_2d_center'][0][0]) / (box_set['bdb_pos'][2] - box_set['bdb_pos'][0]))
             delta_2d.append(((box_set['bdb_pos'][1] + box_set['bdb_pos'][3]) / 2 - box['projected_2d_center'][1][0]) / (box_set['bdb_pos'][3] - box_set['bdb_pos'][1]))
             box_set['delta_2d'] = delta_2d
-            # print box_set['ori_cls']
-            # print box['3dbdb']['centroid'][0]
-            # print num_from_bins(bin['x_bin'], box_set['x_cls'], box_set['x_reg']), num_from_bins(bin['y_bin'], box_set['y_cls'], box_set['y_reg']), num_from_bins(bin['z_bin'], box_set['z_cls'], box_set['z_reg'])
-            # print box['3dbdb']['coeffs'][0]
-            # print size_from_template(box_set['size_reg'], size_template, box['2dbdb']['classname'])
-            # if box['2dbdb']['classname'] not in obj_category.keys():
-            #     obj_category[box['2dbdb']['classname']] = 0
-            # obj_category[box['2dbdb']['classname']] += 1
             box_set['size_cls'] = OBJ_CATEGORY_CLEAN.index(box['2dbdb']['classname'])
             # print box_set['size_cls']
             # print box['2dbdb']['classname']
@@ -245,58 +215,21 @@ def prepare_data(gt_2d_bdb=False, patch_h=224, patch_w=224, shift=True, iou_thre
             boxes_out_flip.append(box_set_flip)
         if len(boxes_out) == 0:
             continue
-        # bdb3d_vis_new = [get_corners_of_bb3d(box['3dbdb']['basis'], box['3dbdb']['coeffs'][0], box['3dbdb']['centroid'][0]) for box in boxes]
-        # show_3d_box(bdb3d_vis_new)
-
-        # show fliped scene
-        # bdb3d_vis_flip = list()
-        # for box_set in boxes_out_flip:
-        #     coeffs = size_from_template(box_set['size_reg'], size_template, OBJ_CATEGORY_CLEAN[box_set['class']])
-        #     centroid = np.array([num_from_bins(bin['x_bin'], box_set['x_cls'], box_set['x_reg']), num_from_bins(bin['y_bin'], box_set['y_cls'], box_set['y_reg']), num_from_bins(bin['z_bin'], box_set['z_cls'], box_set['z_reg'])])
-        #     basis = basis_from_ori(num_from_bins(bin['ori_bin'], box_set['ori_cls'], box_set['ori_reg']))
-        #     bdb3d_vis_flip.append(get_corners_of_bb3d(basis, coeffs, centroid).reshape((1, 8, 3)))
-        # bdb3d_vis_flip = np.vstack(bdb3d_vis_flip)
-        # l_basis_flip = basis_from_ori(num_from_bins(bin['ori_bin'], layout_flip['ori_cls'], layout_flip['ori_reg']))
-        # l_centroid_flip = bin['layout_centroid_avg'] + layout_flip['centroid_reg'] * np.array([1, bin['layout_centroid_avg'][1], bin['layout_centroid_avg'][2]])
-        # l_coeffs_flip = bin['layout_coeffs_avg'] + layout_flip['coeffs_reg'] * bin['layout_coeffs_avg']
-        # show_whole_room(get_corners_of_bb3d(l_basis_flip, l_coeffs_flip, l_centroid_flip).reshape((1, 8, 3)), bdb3d_vis_flip)
-        # show scene
-        # bdb3d_vis = [get_corners_of_bb3d(box['3dbdb']['basis'], box['3dbdb']['coeffs'][0], box['3dbdb']['centroid'][0]).reshape((1, 8, 3)) for box in boxes]
-        # bdb3d_vis = np.vstack(bdb3d_vis)
-        # show_whole_room(get_corners_of_bb3d(l_basis, l_coeffs, l_centroid).reshape((1, 8, 3)), bdb3d_vis)
         data = dict()
         data['rgb_path'] = op.join(PATH.metadata_root, 'images', '%06d.jpg' % (i+1))
-        data['depth_path'] = op.join(PATH.metadata_root, 'depth', str(i+1) + '.npy')
-        data['normal_path'] = op.join(PATH.metadata_root, 'surface_normal', str(i+1) + '.npy')
         data['boxes'] = list_of_dict_to_dict_of_list(boxes_out)
         data['camera'] = camera
         data['layout'] = layout
         data['sequence_id'] = i + 1
-        data['if_l_b'] = if_l_b
         # fliped data
         data_flip = dict()
         data_flip['rgb_path'] = op.join(PATH.metadata_root, 'images', '%06d_flip.jpg' % (i+1))
         # img_flip = Image.open(data['rgb_path']).transpose(Image.FLIP_LEFT_RIGHT)
         # img_flip.save(data_flip['rgb_path'])
-        data_flip['depth_path'] = op.join(PATH.metadata_root, 'depth', str(i+1) + '.npy')
-        data_flip['normal_path'] = op.join(PATH.metadata_root, 'surface_normal', str(i+1) + '_flip.npy')
         data_flip['boxes'] = list_of_dict_to_dict_of_list(boxes_out_flip)
         data_flip['camera'] = camera_flip
         data_flip['layout'] = layout_flip
         data_flip['sequence_id'] = i + 1
-        data_flip['if_l_b'] = if_l_b
-        # normal = np.load(data['normal_path'])
-        # normal = (normal + 1.0) / 2.0
-        # normal = imresize(normal, (normal.shape[0], normal.shape[1])) # to [0-255]
-        # normal = Image.fromarray(normal)
-        # normal.show()
-        # normal_flip = np.load(data['normal_path'])
-        # normal_flip[:, :, 0] = - normal_flip[:, :, 0]
-        # normal_flip = (normal_flip + 1.0) / 2.0
-        # normal_flip = imresize(normal_flip, (normal_flip.shape[0], normal_flip.shape[1])) # to [0-255]
-        # normal_flip = Image.fromarray(normal_flip)
-        # normal_flip = normal_flip.transpose(Image.FLIP_LEFT_RIGHT)
-        # normal_flip.show()
         if shift:
             save_path = op.join(PATH.metadata_root, 'sunrgbd_train_test_data', str(i+1) + '_shift_5' + '.pickle')
             save_path_flip = op.join(PATH.metadata_root, 'sunrgbd_train_test_data', str(i+1) + '_flip' + '_shift_5' + '.pickle')
@@ -313,10 +246,6 @@ def prepare_data(gt_2d_bdb=False, patch_h=224, patch_w=224, shift=True, iou_thre
         with open(save_path_flip, 'w') as f:
             pickle.dump(data_flip, f)
         f.close()
-        # show_2dboxes(sequence.imgrgb, sequence.bdb2d)
-        # show_2dboxes(sequence.imgrgb, bdb2d_from_3d_list)
-        # show_2dboxes(sequence.imgrgb, sequence.bdb2d + bdb2d_from_3d_list, [(1, 0, 0) for _ in range(len(sequence.bdb2d))] + [(0, 1, 0) for _ in range(len(bdb2d_from_3d_list))], random_color=False)
-    # print dict_sort(obj_category)[-30:]
     print np.array(layout_centroid).mean(axis=0)
     print np.array(layout_coeffs).mean(axis=0)
     if not shift:
@@ -730,7 +659,7 @@ def learn_size_bin(category_specific=True):
 
 
 def main():
-    prepare_data(False, shift=True)
+    prepare_data(False, shift=False)
     # learn_size_bin(category_specific=True)
     # learn_size_bin(category_specific=False)
 
