@@ -99,3 +99,7 @@ Download <a href="http://rgbd.cs.princeton.edu/data/SUNRGBDtoolbox.zip">SUNRGBD 
 
 Our code is released under MIT license.
 
+## Contact
+
+Please email huangsiyuan@ucla.edu if you have any questions.
+
