@@ -34,7 +34,7 @@ If you find our work inspiring or our code helpful in your research, please cons
       booktitle={Proceedings of the European Conference on Computer Vision (ECCV)},
       pages={187--203},
       year={2018}
-}
+    }
 
 ## Install 
     pip install -r requirements.txt
