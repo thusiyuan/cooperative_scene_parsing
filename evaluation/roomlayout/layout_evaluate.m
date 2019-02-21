@@ -2,7 +2,7 @@ clc;
 clear all;
 addpath('Utils');
 parpool(4);
-result_path = '/home/siyuan/Documents/nips2018/sunrgbd/results_full';
+result_path = '../../metadata/sunrgbd/results_full';
 %%
 SUNRGBD = load('SUNRGBDMetaUS.mat');
 opts.visualization = 0;
@@ -22,7 +22,7 @@ parfor i = 1:len %%
 %         iou(i) = nan;
 %         continue
 %     end
-    manhattan_layout = load(['/home/siyuan/Documents/nips2018/sunrgbd/3dlayout/' sequence_id '.mat']);
+    manhattan_layout = load(['../../metadata/sunrgbd/3dlayout/' sequence_id '.mat']);
     data = SUNRGBD.SUNRGBDMeta(str2num(sequence_id));
     if size(data.gtCorner3D, 2) == 0
         iou(i) = nan;

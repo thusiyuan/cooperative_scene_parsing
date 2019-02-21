@@ -4,7 +4,7 @@ close all;
 clear all;
 addpath(genpath('.'))
 load('SUNRGBDMetaUS.mat')
-result_path = '/home/siyuan/Documents/cvpr2019_scene_graph/sunrgbd/results_full';
+result_path = '../../metadata/sunrgbd/results_full';
 %% change path
 for imageId = 5 %480
 disp(i);
@@ -12,7 +12,6 @@ bdb_3d = {};
 bdb_2d = {};
 disp(imageId);
 bdb_result_path = fullfile(result_path, int2str(imageId), 'bdb_3d.mat');
-adjacency_matrix_path = fullfile(result_path, int2str(imageId), 'adjacency.mat');
 layout_path = fullfile(result_path, int2str(imageId), 'layout.mat');
 if ~exist(bdb_result_path, 'file')
     continue;
@@ -21,8 +20,6 @@ fig = figure;
 r_path = fullfile(result_path, int2str(imageId), 'r_ex.mat');
 load(r_path);
 load(bdb_result_path);
-load(adjacency_matrix_path);
-adjacency
 data = SUNRGBDMeta(imageId);
 [rgb,points3d,depthInpaint,imsize]=read3dPoints(data);
 %%

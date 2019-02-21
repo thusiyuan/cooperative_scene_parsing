@@ -73,8 +73,11 @@ We pretrained models for pose/layout estimation and bounding box estimation with
 
 ## Test
 Change the model path --model_path_pose and --model_path_bdb in test.py and run it for testing. The results will be saved automatically. It will also compute the 3D IoU and 2D IoU.
-    
+
+Download our trained model from <a href="https://drive.google.com/file/d/1LbhJCxa2OAO4O0GQhrAZZV1KuGAfTrV6/view?usp=sharing">here</a>. Put it under metadata/sunrgbd/models_final
 ## Evaluation
+
+Download <a href="http://rgbd.cs.princeton.edu/data/SUNRGBDtoolbox.zip">SUNRGBD toolbox</a> and put it under evaluation/SUNRGBDtoolbox
 
 1. Visualization
        

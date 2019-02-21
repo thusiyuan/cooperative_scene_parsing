@@ -1,14 +1,14 @@
 clc;
 clear all;
 
-toolboxpath = '/home/siyuan/Documents/Dataset/SUNRGBD_ALL/SUNRGBDtoolbox/SUNRGBDtoolbox';
+toolboxpath = '../../evaluation/SUNRGBDtoolbox';
 addpath(genpath(toolboxpath));
 load(fullfile(toolboxpath,'/traintestSUNRGBD/allsplit.mat'));
 load(fullfile(toolboxpath,'/Metadata/SUNRGBDMeta.mat'));
 new_3d = load(fullfile(toolboxpath,'/Metadata/SUNRGBDMeta3DBB_v2.mat'));
 cls = {'recycle_bin', 'cpu', 'paper', 'toilet', 'stool', 'whiteboard', 'coffee_table', 'picture', 'keyboard', 'dresser', 'painting', 'bookshelf', 'night_stand', 'endtable', 'drawer', 'sink', 'monitor', 'computer', 'cabinet', 'shelf', 'lamp', 'garbage_bin', 'box', 'bed', 'sofa', 'sofa_chair', 'pillow', 'desk', 'table', 'chair'};
 thresh_iou = [0.01,0.05:0.05:0.6,0.8:0.2:1];
-result_path = '/home/siyuan/Documents/nips2018/sunrgbd/results_full';
+result_path = '../../metadata/sunrgbd/results_full';
 vis = false;
 
 %% evaluation

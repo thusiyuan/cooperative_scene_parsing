@@ -42,8 +42,8 @@ parser.add_argument('--obj_cam_ratio', type=float, default=1, help='the ratio be
 parser.add_argument('--branch', type=str, default='jointnet', help='posenet, bdbnet or jointnet')
 parser.add_argument('--rate_decay', type=float, default=10, help='decrease the learning rate by certain epochs')
 parser.add_argument('--fine_tune', type=str2bool, default=True, help='whether to fine-tune the model')
-parser.add_argument('--pre_train_model_path', type=str, default='suncg/models_final/posenet_suncg.pth', help='the directory of pre-trained model')
-parser.add_argument('--pre_train_model_path_2', type=str, default='suncg/models_final/bdbnet_suncg.pth', help='second model path when train the joint net')
+parser.add_argument('--pre_train_model_pose', type=str, default='suncg/models_final/posenet_suncg.pth', help='the directory of pre-trained model')
+parser.add_argument('--pre_train_model_bdb', type=str, default='suncg/models_final/bdbnet_suncg.pth', help='second model path when train the joint net')
 
 
 opt = parser.parse_args()
@@ -63,20 +63,20 @@ print '======> loading dataset'
 posenet = PosNet().to(device)
 bdb3dnet = Bdb3dNet().to(device)
 
-pretrained_path = op.join(opt.metadataPath, opt.pre_train_model_path)
-pretrained_path_2 = op.join(opt.metadataPath, opt.pre_train_model_path_2)
+pretrained_pose = op.join(opt.metadataPath, opt.pre_train_model_pose)
+pretrained_bdb = op.join(opt.metadataPath, opt.pre_train_model_bdb)
 
 if opt.fine_tune:
     if opt.branch == 'posenet':
-        posenet.load_weight(pretrained_path)
+        posenet.load_weight(pretrained_pose)
         posenet.freeze_res_layer(7)
     if opt.branch == 'bdbnet':
-        bdb3dnet.load_weight(pretrained_path)
+        bdb3dnet.load_weight(pretrained_bdb)
         bdb3dnet.freeze_res_layer(5)
     if opt.branch == 'jointnet':
-        posenet.load_weight(pretrained_path)
+        posenet.load_weight(pretrained_pose)
         posenet.freeze_res_layer(6)
-        bdb3dnet.load_weight(pretrained_path_2)
+        bdb3dnet.load_weight(pretrained_bdb)
         bdb3dnet.freeze_res_layer(5)
 elif opt.dataset == 'sunrgbd':  # if we directly train on SUNRGBD, we fix several modules since SUNRGBD is relative small
     if opt.branch == 'posenet' or opt.branch == 'jointnet':
