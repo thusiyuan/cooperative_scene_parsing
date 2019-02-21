@@ -94,4 +94,8 @@ Download <a href="http://rgbd.cs.princeton.edu/data/SUNRGBDtoolbox.zip">SUNRGBD 
 4. Holistic scene understanding
         
         evaluation/holisticScene/evaluate_holistic.m
+        
+## License
+
+Our code is released under MIT license.
 
