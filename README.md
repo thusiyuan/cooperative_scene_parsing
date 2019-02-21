@@ -40,7 +40,7 @@ If you find our work inspiring or our code helpful in your research, please cons
     pip install -r requirements.txt
     
 ## Data
-We preprocess the data from SUNRGBD dataset, the clean data can be downloaded from <a href="https://drive.google.com/file/d/1XeCE87yACXxGisMTPPFb41u_AmQHetBE/view?usp=sharing"> here</a>. Put it under metadata/SUNRGBD/Dataset/.
+We preprocess the data from SUNRGBD dataset, the clean data can be downloaded from <a href="https://drive.google.com/file/d/1QUbq7fRtJtBPkSJbIsZOTwYR5MwtZuiV/view?usp=sharing"> here</a>. Put it under metadata/SUNRGBD/Dataset/.
 
 The ground truth of SUNRGBD dataset could be downloaded <a href="https://drive.google.com/open?id=1QUbq7fRtJtBPkSJbIsZOTwYR5MwtZuiV"> here</a>. Put it under metadata/SUNRGBD/.
 
