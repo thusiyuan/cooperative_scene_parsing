@@ -16,14 +16,9 @@ import os.path as op
 import numpy as np
 from sunrgbd_parser import readsunrgbdframe
 from utils.sunrgbd_utils import project_struct_bdb_to_2d, get_iou, check_bdb, get_corners_of_bb3d, get_bdb_from_corners, get_corners_of_bb3d_no_index, project_3d_points_to_2d
-from utils.camera_utils import yaw_pitch_row_from_r, get_rotation_matrix_from_yaw_roll
-from utils.vis_utils import show_2dboxes
+from utils.camera_utils import yaw_pitch_row_from_r
 from sklearn.cluster import KMeans
 from scipy.io import loadmat
-import random
-from PIL import Image
-import matplotlib.pyplot as plt
-from scipy.misc import imresize
 
 PATH = config.Config('sunrgbd')
 

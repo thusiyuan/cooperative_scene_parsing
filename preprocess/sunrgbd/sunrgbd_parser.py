@@ -10,9 +10,6 @@ import numpy as np
 import pickle
 from PIL import Image
 from scipy.io import loadmat
-import matplotlib.pyplot as plt
-import logging
-import errno
 import config
 
 

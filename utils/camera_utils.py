@@ -21,8 +21,7 @@ Camera notes:
 """
 import numpy as np
 from numpy.linalg import inv
-import copy
-from shapely.geometry.polygon import Polygon
+
 
 
 def rotation_matrix_3d_z(angle):

@@ -17,7 +17,6 @@ from torch.utils.data import Dataset
 from torch.utils.data import DataLoader
 import torch.utils.data
 from torchvision import transforms
-from preprocess.sunrgbd.sunrgbd_process import get_inference_sequence
 
 PATH = config.Config('sunrgbd')
 HEIGHT_PATCH = 256

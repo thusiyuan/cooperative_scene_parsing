@@ -9,10 +9,7 @@ Preprocess the SUNRGBD dataset
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-from utils.net_utils import conv
-from torch.autograd import Variable
 import resnet
-import math
 import torch.utils.model_zoo as model_zoo
 
 
