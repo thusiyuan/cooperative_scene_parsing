@@ -12,6 +12,7 @@ from PIL import Image
 from scipy.io import loadmat
 import config
 
+PATH = config.Config('sunrgbd')
 
 
 # class of SUNRGBD Data
@@ -109,6 +110,9 @@ def readsunrgbdframe(image_name=None, image_id=None):
         img_info = pickle.load(f)
     f.close()
 
+    # change data root manually
+    img_info['imgrgb_path'] = img_info['imgrgb_path'].replace('/home/siyuan/Documents/Dataset/SUNRGBD_ALL/', PATH.metadata_root + '/Dataset/')
+    img_info['imgdepth_path'] = img_info['imgdepth_path'].replace('/home/siyuan/Documents/Dataset/SUNRGBD_ALL/', PATH.metadata_root + '/Dataset/')
     # load rgb img
     img_info['imgrgb'] = np.array(Image.open(img_info['imgrgb_path']))
 
