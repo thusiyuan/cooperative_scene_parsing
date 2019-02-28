@@ -126,7 +126,7 @@ def readsunrgbdframe(image_name=None, image_id=None):
     if 'gt3dcorner' not in img_info.keys():
         img_info['gt3dcorner'] = None
     # load segmentation
-    img_info['seg2d'] = loadmat(img_info['seg2d_path'])['seg_2d']
+    # img_info['seg2d'] = loadmat(img_info['seg2d_path'])['seg_2d']
     scene_category_path = os.path.join(root.data_root, img_info['sequence_name'], 'scene.txt')
     if not os.path.exists(scene_category_path):
         scene_category = None
