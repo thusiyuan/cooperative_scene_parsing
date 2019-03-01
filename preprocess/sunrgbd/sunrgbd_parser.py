@@ -11,7 +11,7 @@ import pickle
 from PIL import Image
 from scipy.io import loadmat
 import config
-
+import sunrgbd_visualize
 PATH = config.Config('sunrgbd')
 
 
@@ -152,13 +152,13 @@ def demo():
     # print np.arccos(data_frame.R_ex[1, 1])
     # print np.arcsin(data_frame.R_ex[2, 1])
     # get 2d corner
-    # visualize.show_2dcorner(data_frame.imgrgb, data_frame.gt3dcorner, data_frame.K, data_frame.R_ex, data_frame.R_tilt, img_only=0)
+    # sunrgbd_visualize.show_2dcorner(data_frame.imgrgb, data_frame.gt3dcorner, data_frame.K, data_frame.R_ex, data_frame.R_tilt, img_only=0)
 
     # # show original 3dpoint
-    # visualize.show_3dpointcloud(data_frame.imgrgb, data_frame.imgdepth, data_frame.K, 40)
+    # sunrgbd_visualize.show_3dpointcloud(data_frame.imgrgb, data_frame.imgdepth, data_frame.K, 40)
     #
     # # show 3d aligned points
-    # visualize.show_3dpointcloud_aligned(data_frame.imgrgb, data_frame.imgdepth, data_frame.K, data_frame.R_tilt, 40)
+    # sunrgbd_visualize.show_3dpointcloud_aligned(data_frame.imgrgb, data_frame.imgdepth, data_frame.K, data_frame.R_tilt, 40)
     #
     # # show depthimg
     # plt.figure()
@@ -170,7 +170,7 @@ def demo():
     # plt.show()
     #
     # # show 2d bounding boxes
-    # visualize.show_2dboxes(data_frame.imgrgb, data_frame.bdb2d)
+    # sunrgbd_visualize.show_2dboxes(data_frame.imgrgb, data_frame.bdb2d)
 
 
 def main():
