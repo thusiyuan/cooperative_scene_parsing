@@ -41,7 +41,7 @@ If you find our work inspiring or our code helpful in your research, please cons
     
 ## Data
 
-1.  Download the raw <a href="rgbd.cs.princeton.edu/data/SUNRGBD.zip">SUNRGBD data</a>. Put it under metadata/SUNRGBD/Dataset/.
+1.  Download the raw <a href="https://rgbd.cs.princeton.edu/data/SUNRGBD.zip">SUNRGBD data</a>. Put it under metadata/SUNRGBD/Dataset/.
 
 2.  We preprocess the data from SUNRGBD dataset, the clean data can be downloaded from <a href="https://drive.google.com/open?id=1XeCE87yACXxGisMTPPFb41u_AmQHetBE"> here</a>. Put it under metadata/SUNRGBD/Dataset/.
 
