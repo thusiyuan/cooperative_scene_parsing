@@ -233,7 +233,7 @@ def train_epoch(epoch):
             total_loss = yaw_cls_loss + yaw_reg_loss + roll_reg_loss + roll_cls_loss + \
                          lo_ori_cls_loss + lo_ori_reg_loss + lo_centroid_loss + lo_coeffs_loss
         if opt.branch == 'bdbnet':
-            total_loss = offset_2d_loss + size_cls_loss + size_reg_loss + ori_cls_loss + ori_reg_loss + centroid_cls_loss + centroid_reg_loss + corner_loss
+            total_loss = offset_2d_loss + size_cls_loss + size_reg_loss + ori_cls_loss + ori_reg_loss + centroid_cls_loss + centroid_reg_loss
         total_loss_record.update(total_loss.item(), opt.batchSize)
 
         if (i + 1) % 25000 == 0:
@@ -254,8 +254,8 @@ def train_epoch(epoch):
               (epoch, total_loss_record.avg, yaw_cls_loss_record.avg, yaw_reg_loss_record.avg, roll_cls_loss_record.avg, roll_reg_loss_record.avg,
                lo_ori_cls_loss_record.avg, lo_ori_reg_loss_record.avg, lo_centroid_loss_record.avg, lo_coeffs_loss_record.avg)
     if opt.branch == 'bdbnet':
-        print 'training loss for %d epoch is %f, offset_loss is %f, corner_loss is %f, size_cls_loss is %f, size_reg_loss is %f, ori_cls_loss is %f, ori_reg_loss is %f, centroid_cls_loss is %f, centroid_reg_loss is %f' % \
-              (epoch, total_loss_record.avg, offset_2d_loss_record.avg, corner_loss_record.avg, size_cls_loss_record.avg, size_reg_loss_record.avg, ori_cls_loss_record.avg, ori_reg_loss_record.avg, centroid_cls_loss_record.avg,
+        print 'training loss for %d epoch is %f, offset_loss is %f, size_cls_loss is %f, size_reg_loss is %f, ori_cls_loss is %f, ori_reg_loss is %f, centroid_cls_loss is %f, centroid_reg_loss is %f' % \
+              (epoch, total_loss_record.avg, offset_2d_loss_record.avg, size_cls_loss_record.avg, size_reg_loss_record.avg, ori_cls_loss_record.avg, ori_reg_loss_record.avg, centroid_cls_loss_record.avg,
                centroid_reg_loss_record.avg)
     if opt.branch == 'jointnet':
         print 'training loss for %d epoch is %f, offset_loss is %f, physical loss is %f, bdb_loss is %f, corner_loss is %f, size_cls_loss is %f, size_reg_loss is %f, ori_cls_loss is %f, ori_reg_loss is %f, ' \
@@ -386,7 +386,7 @@ def test_epoch(epoch):
                 total_loss = yaw_cls_loss + yaw_reg_loss + roll_reg_loss + roll_cls_loss + \
                              lo_ori_cls_loss + lo_ori_reg_loss + lo_centroid_loss + lo_coeffs_loss
             if opt.branch == 'bdbnet':
-                total_loss = offset_2d_loss + size_cls_loss + size_reg_loss + ori_cls_loss + ori_reg_loss + centroid_cls_loss + centroid_reg_loss + corner_loss
+                total_loss = offset_2d_loss + size_cls_loss + size_reg_loss + ori_cls_loss + ori_reg_loss + centroid_cls_loss + centroid_reg_loss
             total_loss_record.update(total_loss.item(), opt.batchSize)
 
         if opt.branch == 'posenet':
@@ -397,8 +397,8 @@ def test_epoch(epoch):
                    lo_ori_cls_loss_record.avg, lo_ori_reg_loss_record.avg, lo_centroid_loss_record.avg,
                    lo_coeffs_loss_record.avg)
         if opt.branch == 'bdbnet':
-            print 'evaluation loss for %d epoch is %f, offset_loss is %f, corner_loss is %f, size_cls_loss is %f, size_reg_loss is %f, ori_cls_loss is %f, ori_reg_loss is %f, centroid_cls_loss is %f, centroid_reg_loss is %f' % \
-                  (epoch, total_loss_record.avg, offset_2d_loss_record.avg, corner_loss_record.avg, size_cls_loss_record.avg,
+            print 'evaluation loss for %d epoch is %f, offset_loss is %f, size_cls_loss is %f, size_reg_loss is %f, ori_cls_loss is %f, ori_reg_loss is %f, centroid_cls_loss is %f, centroid_reg_loss is %f' % \
+                  (epoch, total_loss_record.avg, offset_2d_loss_record.avg, size_cls_loss_record.avg,
                    size_reg_loss_record.avg, ori_cls_loss_record.avg, ori_reg_loss_record.avg,
                    centroid_cls_loss_record.avg,
                    centroid_reg_loss_record.avg)
